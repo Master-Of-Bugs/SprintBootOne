@@ -6,12 +6,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ToDoService {
 
     @Autowired
-    ToDoRepository toDoRepository;
+    private ToDoRepository toDoRepository;
 
     private List<ToDo> toDoList = new ArrayList<>(Arrays.asList(
             new ToDo(1l, "my first task", "05-05-2021"),
@@ -19,6 +20,7 @@ public class ToDoService {
                 new ToDo(3l, "my third task", "07-07-2021"),
                 new ToDo(4l, "my fourth task", "08-08-2021")
         ));
+
 
     public List<ToDo> getToDoList(){
         return toDoList;
@@ -48,7 +50,7 @@ public class ToDoService {
         }
     }
 
-    public void deleteToDoById(int id) {
+    public void deleteToDoById(long id) {
         for (ToDo item : toDoList) {
             if(item.getId() == id){
                 toDoList.remove(item);
@@ -56,5 +58,33 @@ public class ToDoService {
             }
         }
         System.out.println("no any item was found");
+    }
+
+
+
+    public List<ToDo> getToDoListDb(){
+        List<ToDo> toDoList = new ArrayList<>();
+        toDoRepository.findAll()
+                .forEach(toDoList::add);
+        if(toDoList.size() == 0){
+            return new ArrayList<>( Arrays.asList( new ToDo(0l, "db is empty", "00-00-0000")));
+        }
+        return toDoList;
+    }
+
+    public void addToDoItemDb(ToDo toDo) {
+        toDoRepository.save(toDo);
+    }
+
+    public Optional<ToDo> getToDoByIdDb(long id) {
+        return toDoRepository.findById(id);
+    }
+
+    public void updateToDoItemDb(ToDo toDo) {
+        toDoRepository.save(toDo);
+    }
+
+    public void deleteToDoByIdDb(long id) {
+        toDoRepository.deleteById(id);
     }
 }

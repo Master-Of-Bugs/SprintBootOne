@@ -7,7 +7,7 @@ import javax.persistence.Id;
 public class ToDo {
 
     @Id
-    private Long id;
+    private long id;
     private String title;
     private String dueDate;
 
